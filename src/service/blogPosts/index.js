@@ -6,20 +6,21 @@ const blogPostsRouter = express.Router()
 
 blogPostsRouter.post("/", async (req, res, next) => {
   try {
-    const newUser = new blogPostsModel(req.body) // here happens validation of the req.body, if it is not ok Mongoose will throw a "ValidationError"
-    const { _id } = await newUser.save() // this is where the interaction with the db/collection happens
+    const newblogPost = new blogPostsModel(req.body) 
+    const { _id } = await newblogPost.save() 
 
     res.status(201).send({ _id })
   } catch (error) {
+    console.log(error)
     next(error)
   }
 })
 
 blogPostsRouter.get("/", async (req, res, next) => {
   try {
-    const users = await blogPostsModel.find()
+    const blogPosts = await blogPostsModel.find()
 
-    res.send(users)
+    res.send(blogPosts)
   } catch (error) {
     next(error)
   }
@@ -29,12 +30,12 @@ blogPostsRouter.get("/:blogPostsId", async (req, res, next) => {
   try {
     const blogPostsId = req.params.blogPostsId
 
-    const user = await blogPostsModel.findById(blogPostsId) // similar to findOne, but findOne expects to receive a query as parameter
+    const blogPosts = await blogPostsModel.findById(blogPostsId) // similar to findOne, but findOne expects to receive a query as parameter
 
-    if (user) {
-      res.send(user)
+    if (blogPosts) {
+      res.send(blogPosts)
     } else {
-      next(createHttpError(404, `User with id ${blogPostsId} not found!`))
+      next(createHttpError(404, `blogPosts with id ${blogPostsId} not found!`))
     }
   } catch (error) {
     next(error)
@@ -44,14 +45,14 @@ blogPostsRouter.get("/:blogPostsId", async (req, res, next) => {
 blogPostsRouter.put("/:blogPostsId", async (req, res, next) => {
   try {
     const blogPostsId = req.params.blogPostsId
-    const modifiedUser = await blogPostsModel.findByIdAndUpdate(blogPostsId, req.body, {
-      new: true, // returns the modified user
+    const modifiedBlogPosts = await blogPostsModel.findByIdAndUpdate(blogPostsId, req.body, {
+      new: true, // returns the modified blogPosts
     })
 
-    if (modifiedUser) {
-      res.send(modifiedUser)
+    if (modifiedBlogPosts) {
+      res.send(modifiedBlogPosts)
     } else {
-      next(createHttpError(404, `User with id ${blogPostsId} not found!`))
+      next(createHttpError(404, `blogPosts with id ${blogPostsId} not found!`))
     }
   } catch (error) {
     next(error)
@@ -62,12 +63,12 @@ blogPostsRouter.delete("/:blogPostsId", async (req, res, next) => {
   try {
     const blogPostsId = req.params.blogPostsId
 
-    const deletedUser = await blogPostsModel.findByIdAndDelete(blogPostsId)
+    const deletedblogPosts = await blogPostsModel.findByIdAndDelete(blogPostsId)
 
-    if (deletedUser) {
+    if (deletedblogPosts) {
       res.status(204).send()
     } else {
-      next(createHttpError(404, `User with id ${blogPostsId} not found!`))
+      next(createHttpError(404, `blogPosts with id ${blogPostsId} not found!`))
     }
   } catch (error) {
     next(error)

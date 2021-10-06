@@ -10,8 +10,8 @@ const blogPostsSchema = new Schema(
 	    title: { type: String, required: true },
 	    cover:{ type: String, required: true },
 	    readTime: {
-	      value: { type: Number, min: 18, max: 65, required: true },
-	      unit: { type: Number, min: 18, max: 65, required: true }
+	      value: { type: Number, required: true },
+	      unit: { type: String, required: true }
 	    },
 	    author: {
 	      name: { type: String, required: true },
@@ -19,6 +19,9 @@ const blogPostsSchema = new Schema(
 	    },
 	    content: { type: String, required: true },         
 },
+{
+  timestamps: true, // adds createdAt and updatedAt automatically
+}
 )
 
 export default model("BlogPost", blogPostsSchema) // bounded to the "users" collection, if the collection is not there it is automatically created
